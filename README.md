@@ -1,3 +1,3 @@
 # RADseq
 
-## RADseq data analysis for RIVERSCAPE project
+RADseq data analysis for RIVERSCAPE project
