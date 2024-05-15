@@ -16,7 +16,7 @@ plink --file test_plink --make-bed --out test_bed
 ### Running structure threader 
 
 ```
-structure_threader run -K 10 -R 1 -i test_bed.bed -o test_output/ -t 1 -fs ~/fastStructure --ind popmap.txt
+structure_threader run -K 10 -R 1 -i test_bed.bed -o test_output/ -t 4 -fs ~/fastStructure --ind popmap.txt
 ```
 
 *selecting only biallelic loci:*
