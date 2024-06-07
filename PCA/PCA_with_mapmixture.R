@@ -20,7 +20,7 @@ PCA_from_vcf<-function(vcf_path,sample_data_path){
   sample_data<-read.csv(sample_data_path)
   # Loading vcf file
   loaded_vcf<-read.vcfR(vcf_path)
-  #conversion to gendind
+  #conversion to genind
   loaded_genind<-vcfR2genind(loaded_vcf)
   
   # joining sample info with sample names from VCF
