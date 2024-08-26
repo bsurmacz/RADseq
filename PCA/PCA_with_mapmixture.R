@@ -28,7 +28,13 @@ PCA_from_vcf<-function(vcf_path,sample_data_path){
   
   #adding info on population assignment to individuals
   pop(loaded_genind) <-as.vector(samples_joined_with_info$Population)
-  
+  ##    VERSION WITH SHOWING BARCODES ON PCA PLOT
+  #  X<-data.frame(Sample=rownames(loaded_genind$tab) )
+  #  BARCODES<-read.table("Alninc-barcodes.txt")
+  #  colnames(BARCODES)<-c("Sample","pop")
+  #  FINAL<-left_join(X,BARCODES,by="Sample")
+  #  pop(loaded_genind)<- FINAL[,2]
+
   ## Add filtering here:
   ## filtered_genind <- filter(loaded_genind) 
   ## loaded_genind<-filtered_genind
