@@ -11,6 +11,7 @@ for i in *.ustr; do
 paste <(cut -f1 -d ' ' "$i") <(cut -f1 -d ' ' "$i" | cut -f2 -d "_" | cut -f1 -d '-') | sort -u  > POPMAP_"$i".txt
 ./pyradStr2immanc.pl -o "$i".immanc -s "$i" -m POPMAP_"$i".txt
 BA3SNP -o "$i".BA3SNP -t --seed 2025 -v "$i".immanc 
+mv BA3trace.txt "$i"_BA3trace.txt 
 done
 
 
