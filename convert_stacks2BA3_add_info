@@ -1,1 +1,17 @@
-s
+## IPYRAD STRUCTURE-format output  --> directional migration rate matrix using BayesAss3-SNP
+
+
+# Loop:
+# create popmap file
+# convert structure files to immanc (using the popmap files)
+# run BA3SNP on each file tp calculate migration rates!
+# done
+
+for i in *.ustr; do
+paste <(cut -f1 -d ' ' "$i") <(cut -f1 -d ' ' "$i" | cut -f2 -d "_" | cut -f1 -d '-') | sort -u  > POPMAP_"$i".txt
+./pyradStr2immanc.pl -o "$i".immanc -s "$i" -m POPMAP_"$i".txt
+BA3SNP -o "$i".BA3SNP -t --seed 2025 -v "$i".immanc 
+done
+
+
+
