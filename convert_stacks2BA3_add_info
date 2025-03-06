@@ -1,18 +1,28 @@
-## IPYRAD STRUCTURE-format output  --> directional migration rate matrix using BayesAss3-SNP
+## IPYRAD STRUCTURE-format output filrs  --> directional migration rate matrix using BayesAss3-SNP (with autotune parameter search algorithm) 
 
 
 # Loop:
-# create popmap file
-# convert structure files to immanc (using the popmap files)
-# run BA3SNP on each file tp calculate migration rates!
+#  create popmap file
+#  convert structure files to immanc (using the popmap files)
+#  run BA3SNP on each file tp calculate migration rates!
 # done
 
 for i in *.ustr; do
-paste <(cut -f1 -d ' ' "$i") <(cut -f1 -d ' ' "$i" | cut -f2 -d "_" | cut -f1 -d '-') | sort -u  > POPMAP_"$i".txt
-./pyradStr2immanc.pl -o "$i".immanc -s "$i" -m POPMAP_"$i".txt
-BA3SNP -o "$i".BA3SNP -t --seed 2025 -v "$i".immanc 
-mv BA3trace.txt "$i"_BA3trace.txt 
+ paste <(cut -f1 -d ' ' "$i") <(cut -f1 -d ' ' "$i" | cut -f2 -d "_" | cut -f1 -d '-') | sort -u  > POPMAP_"$i".txt
+ ./pyradStr2immanc.pl -o "$i".immanc -s "$i" -m POPMAP_"$i".txt
+ BA3SNP -o "$i".BA3SNP -t --seed 2025 -a0.30 -v --deltaM 0.3 "$i".immanc 
+ mv BA3trace.txt "$i"_BA3trace.txt 
 done
 
 
 
+## AUTOTUNE VERSION
+ 
+for i in *.ustr; do
+ paste <(cut -f1 -d ' ' "$i") <(cut -f1 -d ' ' "$i" | cut -f2 -d "_" | cut -f1 -d '-') | sort -u  > POPMAP_"$i".txt
+ ./pyradStr2immanc.pl -o "$i".immanc -s "$i" -m POPMAP_"$i".txt
+       # count loci save in temp file
+ ./countloci/countLociImmanc.sh -f "$i".immanc > countedlocitemp
+ ./autotune/BA3-SNPS-autotune.py -o "$i".0BA3SNP -l $(tail -2 countedlocitemp | head -1) -i "$i".immanc 
+break
+done
