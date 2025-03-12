@@ -9,6 +9,18 @@ for i in *.ustr; do
  ./pyradStr2immanc.pl -o "$i".immanc -s "$i" -m POPMAP_"$i".txt
  BA3SNP -o "$i".BA3SNP -t --seed 2025 -b 500000 -i 2000000 -n 1000  -m 0.35 -a 0.35 -f 0.75 -v  "$i".immanc > "$i".BA3SNP.log
  mv BA3trace.txt "$i"_BA3trace.txt 
+
+## exporting migration rates to separate files
+## Extracting the part of the output file
+MAIN=`grep -A19 "Migration" "$i".BA3SNP | tail -n +3`
+## Migration rates (numbers not in bracket)
+awk -F '[:()]' '{for(i=2; i<=NF; i+=3) printf "%s\t", $i; print ""}' <(echo "$MAIN") > "$i".migration_rates_matrix
+
+## w nawiasie
+awk -F '[:()]' '{for(i=3; i<=NF; i+=3) printf "%s\t", $i; print ""}' <(echo "$MAIN") > "$i".migration_rates_SE_matrix
+
+
+
 done
 
 
