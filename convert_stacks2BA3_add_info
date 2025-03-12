@@ -13,13 +13,13 @@ for i in *.ustr; do
 ## exporting migration rates to separate files
 ## Extracting the part of the output file
 MAIN=`grep -A19 "Migration" "$i".BA3SNP | tail -n +3`
-## Migration rates (numbers not in bracket)
-awk -F '[:()]' '{for(i=2; i<=NF; i+=3) printf "%s\t", $i; print ""}' <(echo "$MAIN") > "$i".migration_rates_matrix
+## Migration rates (numbers not in brackets)
+grep -B2 "Migration" "$i".BA3SNP | head -1 | sed 's/[0-9]*->//g' | sed 's/^ //' > "$i".migration_rates_matrix
+awk -F '[:()]' '{for(i=2; i<=NF; i+=3) printf "%s\t", $i; print ""}' <(echo "$MAIN") >> "$i".migration_rates_matrix
 
-## w nawiasie
-awk -F '[:()]' '{for(i=3; i<=NF; i+=3) printf "%s\t", $i; print ""}' <(echo "$MAIN") > "$i".migration_rates_SE_matrix
-
-
+## Standard error matrix (numbers in brackets)
+grep -B2 "Migration" "$i".BA3SNP | head -1 | sed 's/[0-9]*->//g' | sed 's/^ //'  > "$i".migration_rates_SE_matrix
+awk -F '[:()]' '{for(i=3; i<=NF; i+=3) printf "%s\t", $i; print ""}' <(echo "$MAIN") >> "$i".migration_rates_SE_matrix
 
 done
 
