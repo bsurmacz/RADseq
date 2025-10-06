@@ -38,7 +38,11 @@ done
 
 
 ##
-todo: generate popmaps!!
+## : generate popmaps!!
+```
+bcftools query -l biallelic/Alninc.vcf | awk -F'-' '{print $0, $1}'
+
+```
 
 for file in BEDs/*.bed; do
     base=$(basename "$file" .bed)
