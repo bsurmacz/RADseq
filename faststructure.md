@@ -19,5 +19,31 @@ plink --file test_plink --make-bed --out test_bed
 structure_threader run -K 10 -R 1 -i test_bed.bed -o test_output/ -t 4 -fs ~/fastStructure --ind popmap.txt
 ```
 
-*selecting only biallelic loci:*
- *awk '/^#/ || $5 !~ /,/' test.vcf > test.2alleles.vcf*  
+
+### NOW FOR ALL FILES
+for file in biallelic/*.vcf; do
+    base=$(basename "$file" .vcf)
+
+    # Run vcftools and send output to PEDs directory
+    vcftools --vcf "$file" --plink --out "PEDs/${base}"
+done
+
+
+
+mkdir BEDs
+for file in PEDs/*.ped; do
+    base=$(basename "$file" .ped)
+    plink --file PEDs/"$base" --make-bed --out "BEDs/${base}"
+done
+
+
+##
+todo: generate popmaps!!
+
+for file in BEDs/*.bed; do
+    base=$(basename "$file" .bed)
+   structure_threader run -K 10 -R 1 -i BEDs/"$base".bed -o structure_output/ -t 4 -fs /opt/miniconda3/bin/fastStructure 
+done
+
+
+ 
