@@ -21,32 +21,41 @@ structure_threader run -K 10 -R 1 -i test_bed.bed -o test_output/ -t 4 -fs ~/fas
 
 
 ### NOW FOR ALL FILES
+```
 for file in biallelic/*.vcf; do
     base=$(basename "$file" .vcf)
 
     # Run vcftools and send output to PEDs directory
     vcftools --vcf "$file" --plink --out "PEDs/${base}"
 done
+```
 
-
-
+```
 mkdir BEDs
 for file in PEDs/*.ped; do
     base=$(basename "$file" .ped)
     plink --file PEDs/"$base" --make-bed --out "BEDs/${base}"
 done
-
+```
 
 ##
 ## : generate popmaps!!
 ```
-bcftools query -l biallelic/Alninc.vcf | awk -F'-' '{print $0, $1}'
+mkdir BEDs
+
+conda activate bcftools
+for file in biallelic/*.vcf; do
+    base=$(basename "$file" .ped)
+    bcftools query -l "$file" | awk -F'-' '{print $0, $1}' > "$base".popmap
+done
+
+
 
 ```
 
 for file in BEDs/*.bed; do
     base=$(basename "$file" .bed)
-   structure_threader run -K 10 -R 1 -i BEDs/"$base".bed -o structure_output/ -t 4 -fs /opt/miniconda3/bin/fastStructure 
+   structure_threader run -K 10 -R 1 -i BEDs/"$base".bed -o structure_output/"$base" -t 16 -fs /opt/miniconda3/bin/fastStructure --ind "$base".vcf.popmap
 done
 
 
