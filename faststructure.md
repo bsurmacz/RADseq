@@ -22,6 +22,8 @@ structure_threader run -K 10 -R 1 -i test_bed.bed -o test_output/ -t 4 -fs ~/fas
 
 ### NOW FOR ALL FILES
 ```
+conda activate vcftools
+mkdir PEDs
 for file in biallelic/*.vcf; do
     base=$(basename "$file" .vcf)
 
@@ -32,6 +34,7 @@ done
 
 ```
 mkdir BEDs
+conda activate plink
 for file in PEDs/*.ped; do
     base=$(basename "$file" .ped)
     plink --file PEDs/"$base" --make-bed --out "BEDs/${base}"
@@ -53,10 +56,11 @@ done
 
 ```
 
+```
 for file in BEDs/*.bed; do
     base=$(basename "$file" .bed)
-   structure_threader run -K 10 -R 1 -i BEDs/"$base".bed -o structure_output/"$base" -t 16 -fs /opt/miniconda3/bin/fastStructure --ind "$base".vcf.popmap
+   structure_threader run -K 20 -R 1 -i BEDs/"$base".bed -o structure_output/"$base" -t 16 -fs /opt/miniconda3/bin/fastStructure --ind "$base".vcf.popmap
 done
-
+```
 
  
